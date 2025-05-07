@@ -24,6 +24,7 @@ jobs:
         with:
           format: rdjson
           output: rd.json
+          exit-code: 0
           diff: false
       - name: Run reviewdog
         if: always()

@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Dependencies
         # Installs your project's dependencies, including ESLint if it's a devDependency.
-        run: npm install # Use 'npm install' if you don't have a lock file
+        run: npm ci # Use 'npm install' if you don't have a lock file
 
       - name: Run ESLint with Reviewdog
         # Runs ESLint and reports the findings using Reviewdog as GitHub Checks.

@@ -1,6 +1,5 @@
 name: SAST PR Check
 
-name: reviewdog (github-check)
 on:
   push:
     branches:

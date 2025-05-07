@@ -1,0 +1,42 @@
+name: ESLint Reviewdog
+
+on:
+  push:
+    branches:
+      - '**' # This triggers the workflow on push to any branch
+
+jobs:
+  eslint:
+    name: Run ESLint and Reviewdog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        # Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        # Sets up a Node.js environment. Use the version your project requires.
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*' # Or a specific version like '18', '20', etc.
+
+      - name: Install Dependencies
+        # Installs your project's dependencies, including ESLint if it's a devDependency.
+        run: npm ci # Use 'npm install' if you don't have a lock file
+
+      - name: Run ESLint with Reviewdog
+        # Runs ESLint and reports the findings using Reviewdog as GitHub Checks.
+        uses: reviewdog/action-eslint@v1
+        with:
+          # Provide the GitHub Token. GitHub Actions provides a default token with
+          # appropriate permissions (usually sufficient for checks).
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Use the 'github-check' reporter to create a check run on the commit.
+          # This is suitable for push events.
+          reporter: github-check
+          # Optional: Specify ESLint arguments, e.g., to lint specific directories
+          # eslint_args: './src ./test'
+          # Optional: Specify filter mode. 'diff' (default) reports only on changed lines.
+          # 'nofilter' reports on all findings in the checked files.
+          # filter_mode: 'nofilter'

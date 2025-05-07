@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/add_SAST
   pull_request:
 
 permissions:
@@ -31,10 +32,6 @@ jobs:
         run: |
           cat rd.json | reviewdog -f=rdjson -reporter=github-check
   horusec_code:
-    runs-on: ubuntu-latest
-    name: Horusec Scan
-    steps:
-      horusec-security:
     name: horusec-security
     runs-on: ubuntu-latest
     steps:

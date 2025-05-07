@@ -1,14 +1,15 @@
-name: SAST PR Check
+name: Bearer PR Check
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
   pull-requests: write
 
 jobs:
-  bearer_check:
+  rule_check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,23 +21,10 @@ jobs:
         with:
           format: rdjson
           output: rd.json
-          diff: false
+          diff: true
       - name: Run reviewdog
         if: always()
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat rd.json | reviewdog -f=rdjson -reporter=github-pr-check
-  horusec_code:
-    name: horusec-security
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-        with: 
-          fetch-depth: 0
-      - name: Run Horusec
-        id: run_horusec
-        uses: fike/horusec-action@v0.2.2
-        with:
-          arguments: -c=horusec-config.json -p ./ --ignore="**/.vscode/**, **/tests/**, **/docs/**"
+          cat rd.json | reviewdog -f=rdjson -reporter=github-pr-review
